@@ -3,13 +3,9 @@ const headerInput = document.querySelector('.header-input');
 const todoList = document.querySelector('.todo-list');
 const todoCompleted = document.querySelector('.todo-completed');
 
-const toDoData = []
+const toDoData = JSON.parse(localStorage.getItem("deal")) || []
 
 console.log( toDoData);
-
-if(localStorage.getItem('deal')) {
-  setStyles();
-} 
 
 const render = function() {
   todoList.innerHTML = '';
@@ -58,12 +54,5 @@ todoControl.addEventListener('submit', function(event) {
   localStorage.setItem('deal', JSON.stringify(toDoData))
   render()
 })
-
-function setStyles() {
-  let currentText = localStorage.getItem('deal');
-
-  toDoData.push(JSON.parse(currentText))
-
-}
 
 render()
