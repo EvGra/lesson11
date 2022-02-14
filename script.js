@@ -1,30 +1,69 @@
-const input = document.querySelector('#text');
-const btn = document.querySelector('#btn');
-const color = document.querySelector('#square');
-const btnCircle = document.querySelector('#e_btn');
-const range = document.querySelector('#range');
-const circle = document.querySelector('#circle');
-const span = document.querySelector('#range-span')
+const todoControl = document.querySelector('.todo-control');
+const headerInput = document.querySelector('.header-input');
+const todoList = document.querySelector('.todo-list');
+const todoCompleted = document.querySelector('.todo-completed');
 
-const colorChange = function(){
-  color.style.backgroundColor = input.value
+const toDoData = []
+
+console.log( toDoData);
+
+if(localStorage.getItem('deal')) {
+  setStyles();
+} 
+
+const render = function() {
+  todoList.innerHTML = '';
+  todoCompleted.innerHTML = '';
+
+  toDoData.forEach( function(item) {
+    const li = document.createElement('li')
+
+    li.classList.add('todo-item')
+
+    li.innerHTML = '<span class="text-todo">' + item.text + '</span>' + '<div class="todo-buttons">' + '<button class="todo-remove"></button>' + '<button class="todo-complete"></button>' + '<div>'
+
+    if (item.completed) {
+      todoCompleted.append(li)
+    } else {
+      todoList.append(li)
+    }
+
+    li.querySelector('.todo-complete').addEventListener('click', function() {
+      item.completed = !item.completed
+      render()
+    })
+    
+    
+    li.querySelector('.todo-remove').addEventListener('click', function() {
+
+      const index = toDoData.indexOf(item)
+      
+      toDoData.splice(index, 1)
+      render()
+    })
+  })
 }
 
-btn.addEventListener('click', colorChange)
+todoControl.addEventListener('submit', function(event) {
+  event.preventDefault()
 
+  const newToDo = {
+    text: headerInput.value,
+    completed: false
+  }
+  if (newToDo.text.trim() !== '')
+  toDoData.push(newToDo)
+  headerInput.value = ''
 
-btnCircle.style.display = 'none';
+  localStorage.setItem('deal', JSON.stringify(toDoData))
+  render()
+})
 
+function setStyles() {
+  let currentText = localStorage.getItem('deal');
 
-const circleChange = function (event) {
-  span.textContent = event.target.valueAsNumber
-  
-  circle.style.height = event.target.valueAsNumber + '%'
-  circle.style.width = event.target.valueAsNumber + '%' 
+  toDoData.push(JSON.parse(currentText))
 
-  console.log(event.target.valueAsNumber)
 }
-range.addEventListener('input', circleChange)
-range.addEventListener('change', circleChange)
 
-
+render()
