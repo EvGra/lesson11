@@ -5,8 +5,6 @@ const todoCompleted = document.querySelector('.todo-completed');
 
 const toDoData = JSON.parse(localStorage.getItem("deal")) || []
 
-console.log( toDoData);
-
 const render = function() {
   todoList.innerHTML = '';
   todoCompleted.innerHTML = '';
@@ -26,6 +24,9 @@ const render = function() {
 
     li.querySelector('.todo-complete').addEventListener('click', function() {
       item.completed = !item.completed
+
+      localStorage.removeItem('deal')
+      localStorage.setItem('deal', JSON.stringify(toDoData))
       render()
     })
     
@@ -35,6 +36,9 @@ const render = function() {
       const index = toDoData.indexOf(item)
       
       toDoData.splice(index, 1)
+
+      localStorage.removeItem('deal')
+      localStorage.setItem('deal', JSON.stringify(toDoData))
       render()
     })
   })
